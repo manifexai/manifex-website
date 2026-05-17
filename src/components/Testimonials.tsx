@@ -95,7 +95,7 @@ export default function Testimonials() {
               {/* Content */}
               <div className="relative z-10">
                 <p className="text-xl text-gray-300 leading-relaxed mb-6">
-                  "{testimonial.quote}"
+                  <span>&quot;{testimonial.quote}&quot;</span>
                 </p>
               </div>
             </motion.div>
