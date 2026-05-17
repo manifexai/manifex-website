@@ -95,7 +95,11 @@ export default function Testimonials() {
               {/* Content */}
               <div className="relative z-10">
                 <p className="text-xl text-gray-300 leading-relaxed mb-6">
+<<<<<<< HEAD
                   &quot;{testimonial.quote}&quot;
+=======
+                  <span>&quot;{testimonial.quote}&quot;</span>
+>>>>>>> 640e7375bf6c6ec12368fc4499e48a3b64b67336
                 </p>
               </div>
             </motion.div>
