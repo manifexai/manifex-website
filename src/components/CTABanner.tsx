@@ -64,7 +64,7 @@ export default function CTABanner() {
 
           {/* Subheading */}
           <p className="text-gray-300 text-xl md:text-2xl mb-12 max-w-3xl mx-auto">
-            Let's transform your vision into a premium digital experience that drives growth and captivates your audience.
+            Let&apos;s transform your vision into a premium digital experience that drives growth and captivates your audience.
           </p>
 
           {/* CTA section */}
@@ -75,7 +75,7 @@ export default function CTABanner() {
             className="text-center mb-8"
           >
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              Let's Build Something <span className="gradient-text">Futuristic</span>
+              Let&apos;s Build Something <span className="gradient-text">Futuristic</span>
             </h2>
             <p className="text-xl text-gray-300 max-w-2xl mx-auto">
               Modern brands deserve modern digital experiences.
