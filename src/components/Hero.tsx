@@ -6,12 +6,21 @@ import Image from 'next/image';
 import Logo from './Logo';
 import UnicornScene from 'unicornstudio-react';
 import MagneticButton from './MagneticButton';
+import { useState, useEffect } from 'react';
 
 export default function Hero() {
   const { scrollY } = useScroll();
   const y1 = useTransform(scrollY, [0, 1000], [0, 200]);
   const y2 = useTransform(scrollY, [0, 1000], [0, -150]);
   const opacity = useTransform(scrollY, [0, 500], [1, 0]);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -42,51 +51,55 @@ export default function Hero() {
           width="100%"
           height="100%"
           scale={1}
-          dpi={1.5}
+          dpi={isMobile ? 1 : 1.5}
           sdkUrl="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@2.1.12/dist/unicornStudio.umd.js"
         />
       </div>
 
-      {/* Dark overlay for readability */}
+      {/* Dark overlay for readability - increased opacity for better text visibility */}
       <motion.div
         style={{ opacity }}
-        className="absolute inset-0 bg-black/60 z-1"
+        className="absolute inset-0 bg-black/75 z-10"
       />
 
-      {/* Animated grid background */}
-      <div className="absolute inset-0 grid-bg opacity-20 z-1" />
+      {/* Animated grid background - disabled on mobile */}
+      {!isMobile && <div className="absolute inset-0 grid-bg opacity-20 z-10" />}
 
-      {/* Gradient orbs with enhanced animation */}
-      <motion.div
-        style={{ y: y1 }}
-        animate={{
-          scale: [1, 1.3, 1],
-          opacity: [0.2, 0.4, 0.2],
-        }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          ease: 'easeInOut',
-        }}
-        className="absolute top-1/4 left-1/4 w-96 h-96 bg-red-500/30 rounded-full blur-3xl z-1"
-      />
-      <motion.div
-        style={{ y: y2 }}
-        animate={{
-          scale: [1, 1.4, 1],
-          opacity: [0.15, 0.35, 0.15],
-        }}
-        transition={{
-          duration: 10,
-          repeat: Infinity,
-          ease: 'easeInOut',
-          delay: 2,
-        }}
-        className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-red-600/20 rounded-full blur-3xl z-1"
-      />
+      {/* Gradient orbs - disabled on mobile for performance */}
+      {!isMobile && (
+        <>
+          <motion.div
+            style={{ y: y1 }}
+            animate={{
+              scale: [1, 1.3, 1],
+              opacity: [0.2, 0.4, 0.2],
+            }}
+            transition={{
+              duration: 8,
+              repeat: Infinity,
+              ease: 'easeInOut',
+            }}
+            className="absolute top-1/4 left-1/4 w-96 h-96 bg-red-500/30 rounded-full blur-3xl z-10"
+          />
+          <motion.div
+            style={{ y: y2 }}
+            animate={{
+              scale: [1, 1.4, 1],
+              opacity: [0.15, 0.35, 0.15],
+            }}
+            transition={{
+              duration: 10,
+              repeat: Infinity,
+              ease: 'easeInOut',
+              delay: 2,
+            }}
+            className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-red-600/20 rounded-full blur-3xl z-10"
+          />
+        </>
+      )}
 
-      {/* Enhanced floating particles */}
-      {[...Array(20)].map((_, i) => (
+      {/* Floating particles - reduced count on mobile */}
+      {[...Array(isMobile ? 5 : 20)].map((_, i) => (
         <motion.div
           key={i}
           animate={{
@@ -100,7 +113,7 @@ export default function Hero() {
             ease: 'easeInOut',
             delay: Math.random() * 5,
           }}
-          className="absolute w-1 h-1 bg-red-500 rounded-full z-1"
+          className="absolute w-1 h-1 bg-red-500 rounded-full z-10"
           style={{
             left: `${Math.random() * 100}%`,
             top: `${Math.random() * 100}%`,
@@ -113,31 +126,35 @@ export default function Hero() {
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="relative z-10 text-center px-4 max-w-6xl mx-auto"
+        className="relative z-20 text-center px-4 max-w-6xl mx-auto"
       >
-        {/* Logo with enhanced animation */}
+        {/* Logo with enhanced animation - simplified on mobile */}
         <motion.div variants={itemVariants} className="mb-8 flex justify-center">
           <div className="relative">
+            {!isMobile && (
+              <>
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
+                  className="absolute -inset-8 border-2 border-red-500/50 rounded-full"
+                />
+                <motion.div
+                  animate={{ rotate: -360 }}
+                  transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+                  className="absolute -inset-12 border border-red-500/40 rounded-full"
+                />
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 15, repeat: Infinity, ease: 'linear' }}
+                  className="absolute -inset-16 border border-red-500/30 rounded-full"
+                />
+              </>
+            )}
             <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
-              className="absolute -inset-8 border-2 border-red-500/50 rounded-full"
-            />
-            <motion.div
-              animate={{ rotate: -360 }}
-              transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-              className="absolute -inset-12 border border-red-500/40 rounded-full"
-            />
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 15, repeat: Infinity, ease: 'linear' }}
-              className="absolute -inset-16 border border-red-500/30 rounded-full"
-            />
-            <motion.div
-              whileHover={{ scale: 1.15, rotate: 0 }}
-              className="relative w-32 h-32 bg-gradient-to-br from-red-600 via-red-500 to-red-700 rounded-full flex items-center justify-center glow-red cursor-pointer shadow-2xl shadow-red-500/50"
+              whileHover={{ scale: isMobile ? 1.05 : 1.15, rotate: 0 }}
+              className={`relative bg-gradient-to-br from-red-600 via-red-500 to-red-700 rounded-full flex items-center justify-center glow-red cursor-pointer ${isMobile ? 'w-20 h-20 shadow-lg' : 'w-32 h-32 shadow-2xl shadow-red-500/50'}`}
             >
-              <Logo className="w-28 h-28" />
+              <Logo className={isMobile ? 'w-16 h-16' : 'w-28 h-28'} />
             </motion.div>
           </div>
         </motion.div>
@@ -145,7 +162,7 @@ export default function Hero() {
         {/* Heading with text reveal */}
         <motion.h1
           variants={itemVariants}
-          className="text-5xl md:text-7xl lg:text-9xl font-bold text-white mb-6 leading-tight tracking-tight"
+          className="text-4xl sm:text-5xl md:text-7xl lg:text-9xl font-bold text-white mb-6 leading-tight tracking-tight"
         >
           <motion.span
             initial={{ opacity: 0, y: 50 }}
@@ -168,15 +185,15 @@ export default function Hero() {
         {/* Subheading */}
         <motion.p
           variants={itemVariants}
-          className="text-xl md:text-2xl text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed"
+          className="text-lg sm:text-xl md:text-2xl text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed"
         >
           Trusted AI studio{' '}
           <span className="text-red-500">
-            <Zap className="inline w-6 h-6" />
+            <Zap className="inline w-5 h-5 sm:w-6 sm:h-6" />
           </span>{' '}
           building modern websites, SaaS products & automation systems for growing brands{' '}
           <span className="inline-block animate-bounce">
-            <Sparkles className="inline w-6 h-6 text-red-500" />
+            <Sparkles className="inline w-5 h-5 sm:w-6 sm:h-6 text-red-500" />
           </span>
         </motion.p>
 
@@ -192,11 +209,11 @@ export default function Hero() {
               rel="noopener noreferrer"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="group relative px-8 py-4 bg-red-600 text-white font-semibold rounded-lg overflow-hidden glow-red-hover transition-all"
+              className="group relative px-6 py-3 sm:px-8 sm:py-4 bg-red-600 text-white font-semibold rounded-lg overflow-hidden glow-red-hover transition-all"
             >
               <span className="relative z-10 flex items-center gap-2">
                 Start a Chat
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
               </span>
               <motion.div
                 className="absolute inset-0 bg-gradient-to-r from-red-600 to-red-700"
@@ -211,67 +228,71 @@ export default function Hero() {
             href="tel:+917591952491"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="px-8 py-4 border border-red-500/50 text-white font-semibold rounded-lg hover:bg-red-500/10 transition-all"
+            className="px-6 py-3 sm:px-8 sm:py-4 border border-red-500/50 text-white font-semibold rounded-lg hover:bg-red-500/10 transition-all"
           >
             Make a Call
           </motion.a>
         </motion.div>
 
-        {/* Enhanced floating UI elements */}
-        <motion.div
-          style={{ y: y2 }}
-          animate={{ y: [0, -20, 0] }}
-          transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute top-20 right-20 glass p-4 rounded-xl hidden lg:block z-10"
-        >
-          <div className="flex items-center gap-3">
+        {/* Enhanced floating UI elements - desktop only */}
+        {!isMobile && (
+          <>
             <motion.div
-              animate={{ rotate: [0, 360] }}
-              transition={{ duration: 10, repeat: Infinity, ease: 'linear' }}
-              className="w-10 h-10 bg-red-500/20 rounded-lg flex items-center justify-center"
+              style={{ y: y2 }}
+              animate={{ y: [0, -20, 0] }}
+              transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+              className="absolute top-20 right-20 glass p-4 rounded-xl hidden lg:block z-20"
             >
-              <Zap className="w-5 h-5 text-red-500" />
+              <div className="flex items-center gap-3">
+                <motion.div
+                  animate={{ rotate: [0, 360] }}
+                  transition={{ duration: 10, repeat: Infinity, ease: 'linear' }}
+                  className="w-10 h-10 bg-red-500/20 rounded-lg flex items-center justify-center"
+                >
+                  <Zap className="w-5 h-5 text-red-500" />
+                </motion.div>
+                <div>
+                  <div className="text-sm text-gray-400">AI Powered</div>
+                  <div className="text-white font-semibold">Fast & Smart</div>
+                </div>
+              </div>
             </motion.div>
-            <div>
-              <div className="text-sm text-gray-400">AI Powered</div>
-              <div className="text-white font-semibold">Fast & Smart</div>
-            </div>
-          </div>
-        </motion.div>
 
-        <motion.div
-          style={{ y: y1 }}
-          animate={{ y: [0, 20, 0] }}
-          transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
-          className="absolute bottom-32 left-20 glass p-4 rounded-xl hidden lg:block z-10"
-        >
-          <div className="flex items-center gap-3">
             <motion.div
-              animate={{ rotate: [0, -360] }}
-              transition={{ duration: 12, repeat: Infinity, ease: 'linear' }}
-              className="w-10 h-10 bg-red-500/20 rounded-lg flex items-center justify-center"
+              style={{ y: y1 }}
+              animate={{ y: [0, 20, 0] }}
+              transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+              className="absolute bottom-32 left-20 glass p-4 rounded-xl hidden lg:block z-20"
             >
-              <Sparkles className="w-5 h-5 text-red-500" />
+              <div className="flex items-center gap-3">
+                <motion.div
+                  animate={{ rotate: [0, -360] }}
+                  transition={{ duration: 12, repeat: Infinity, ease: 'linear' }}
+                  className="w-10 h-10 bg-red-500/20 rounded-lg flex items-center justify-center"
+                >
+                  <Sparkles className="w-5 h-5 text-red-500" />
+                </motion.div>
+                <div>
+                  <div className="text-sm text-gray-400">Premium Quality</div>
+                  <div className="text-white font-semibold">100% Satisfaction</div>
+                </div>
+              </div>
             </motion.div>
-            <div>
-              <div className="text-sm text-gray-400">Premium Quality</div>
-              <div className="text-white font-semibold">100% Satisfaction</div>
-            </div>
-          </div>
-        </motion.div>
+          </>
+        )}
       </motion.div>
 
-      {/* Enhanced scroll indicator */}
+      {/* Enhanced scroll indicator - simplified on mobile */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2.5 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20"
       >
         <motion.div
           animate={{ y: [0, 10, 0] }}
           transition={{ duration: 2, repeat: Infinity }}
-          className="w-6 h-10 border-2 border-red-500/50 rounded-full flex justify-center pt-2 backdrop-blur-sm"
+          className="w-6 h-10 border-2 border-red-500/50 rounded-full flex justify-center pt-2"
         >
           <motion.div
             animate={{ y: [0, 12, 0] }}

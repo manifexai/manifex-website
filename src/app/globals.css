@@ -69,6 +69,14 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+/* Mobile-optimized glassmorphism */
+@media (max-width: 767px) {
+  .glass {
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+}
+
 /* Glow effects */
 .glow-red {
   box-shadow: 0 0 20px rgba(239, 68, 68, 0.5),
@@ -80,6 +88,19 @@ body {
   box-shadow: 0 0 30px rgba(239, 68, 68, 0.7),
               0 0 60px rgba(239, 68, 68, 0.5),
               0 0 90px rgba(239, 68, 68, 0.3);
+}
+
+/* Mobile-optimized glow effects */
+@media (max-width: 767px) {
+  .glow-red {
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.4),
+                0 0 20px rgba(239, 68, 68, 0.2);
+  }
+
+  .glow-red-hover:hover {
+    box-shadow: 0 0 15px rgba(239, 68, 68, 0.5),
+                0 0 30px rgba(239, 68, 68, 0.3);
+  }
 }
 
 /* Gradient text */
@@ -122,7 +143,7 @@ body {
   background-size: 50px 50px;
 }
 
-/* Motion blur effect */
+/* Motion blur effect - disabled on mobile for performance */
 .motion-blur {
   filter: blur(0px);
   transition: filter 0.3s ease;
@@ -130,6 +151,12 @@ body {
 
 .motion-blur:hover {
   filter: blur(2px);
+}
+
+@media (max-width: 767px) {
+  .motion-blur:hover {
+    filter: blur(0px);
+  }
 }
 
 /* Smooth 3D transitions */

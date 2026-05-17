@@ -11,6 +11,7 @@ import {
   ArrowRight,
 } from 'lucide-react';
 import MagneticButton from './MagneticButton';
+import { useState, useEffect } from 'react';
 
 const services = [
   {
@@ -45,6 +46,14 @@ export default function Services() {
   const isInView = useInView(ref, { once: true, margin: '-100px' });
   const { scrollY } = useScroll();
   const y = useTransform(scrollY, [0, 500], [0, -100]);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -70,19 +79,21 @@ export default function Services() {
     <section ref={ref} className="relative py-32 px-4 bg-black overflow-hidden">
       {/* Background effects */}
       <div className="absolute inset-0 grid-bg opacity-20" />
-      <motion.div
-        style={{ y }}
-        animate={{
-          scale: [1, 1.2, 1],
-          opacity: [0.1, 0.25, 0.1],
-        }}
-        transition={{
-          duration: 10,
-          repeat: Infinity,
-          ease: 'easeInOut',
-        }}
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-red-500/15 rounded-full blur-3xl"
-      />
+      {!isMobile && (
+        <motion.div
+          style={{ y }}
+          animate={{
+            scale: [1, 1.2, 1],
+            opacity: [0.1, 0.25, 0.1],
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: 'easeInOut',
+          }}
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-red-500/15 rounded-full blur-3xl"
+        />
+      )}
 
       <div className="relative z-10 max-w-7xl mx-auto">
         {/* Section header */}
@@ -133,9 +144,8 @@ export default function Services() {
                 {/* Icon */}
                 <motion.div
                   whileHover={{ 
-                    rotate: 360, 
+                    rotate: isMobile ? 0 : 360, 
                     scale: 1.15,
-                    boxShadow: '0 0 30px rgba(239, 68, 68, 0.5)',
                   }}
                   transition={{ duration: 0.8, ease: 'easeInOut' }}
                   className="w-16 h-16 bg-red-500/20 rounded-xl flex items-center justify-center mb-6 group-hover:bg-red-500/30 transition-colors duration-500"
