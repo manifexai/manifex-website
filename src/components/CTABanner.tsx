@@ -75,7 +75,7 @@ export default function CTABanner() {
             className="text-center mb-8"
           >
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              Let's Build Something <span className="gradient-text">Futuristic</span>
+              Let&apos;s Build Something <span className="gradient-text">Futuristic</span>
             </h2>
             <p className="text-xl text-gray-300 max-w-2xl mx-auto">
               Modern brands deserve modern digital experiences.
